@@ -5,7 +5,7 @@ import numpy as np
 
 from update import pandas_batch_update
 from update import fast_batch_update
-#from update import faster_batch_update
+from update import faster_batch_update
 #from update import fastest_batch_update
 
 # load and prepare data
@@ -96,3 +96,11 @@ def test_fast_batch_update_cov_values(setup_update, expected_update):
     assert np.allclose(calc_root_cov, expected_update['cov'])
 
 
+def test_faster_batch_update_mean(setup_update, expected_update):
+    calc_mean, calc_root_cov = faster_batch_update(**setup_update)
+    assert np.allclose(calc_mean, expected_update['mean'])
+
+
+def test_faster_batch_update_cov_values(setup_update, expected_update):
+    calc_mean, calc_root_cov = faster_batch_update(**setup_update)
+    assert np.allclose(calc_root_cov, expected_update['cov'])

@@ -107,3 +107,44 @@ def fast_batch_update(states, root_covs, measurements, loadings, meas_var):
          
      return updated_states, updated_root_covs
      
+ 
+def faster_batch_update(states, root_covs, measurements, loadings, meas_var):
+     """Update state estimates for a whole dataset.
+
+     Let nstates be the number of states and nobs the number of observations.
+
+     Args:
+         states (np.ndarray): 2d array of size (nobs, nstates)
+         root_covs (np.ndarray): 3d array of size (nobs, nstates, nstates)
+         measurements (np.ndarray): 1d array of size (nobs)
+         loadings (np.ndarray): 1d array of size (nstates)
+         meas_var (float):
+
+     Returns:
+         updated_states (np.ndarray): 2d array of size (nobs, nstates)
+         updated_root_covs (np.ndarray): 3d array of size (nobs, nstates, nstates)
+
+     """
+     residuals = measurements - np.dot(states, loadings)
+     
+     root_covs = tf.constant(root_covs)
+     p = tf.matmul(root_covs, root_covs, transpose_b=True)
+     sess = tf.Session()
+     p = sess.run(p)
+     
+     f = np.dot(p, loadings)
+     sigmas = np.dot(f, loadings) + np.full(len(states), meas_var)
+     k = f / sigmas.reshape(2207, 1)
+     updated_states = states + k * residuals.reshape(2207, 1)
+     
+     f_tf = tf.constant(f.reshape(2207,5,1))
+     f_2 = tf.matmul(f_tf, f_tf, transpose_b=True)
+     f_2 = sess.run(f_2)
+     
+     updated_p = p - f_2 / sigmas.reshape(2207,1,1)
+     
+     updated_p = tf.constant(updated_p)
+     l= tf.linalg.cholesky(updated_p)
+     updated_root_covs = sess.run(l)
+     
+     return updated_states, updated_root_covs
