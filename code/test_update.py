@@ -5,8 +5,8 @@ import numpy as np
 
 from update import pandas_batch_update
 from update import fast_batch_update
-from update import faster_batch_update
-from update import fastest_batch_update
+#from update import faster_batch_update
+#from update import fastest_batch_update
 
 # load and prepare data
 data = pd.read_stata("../chs_data.dta")

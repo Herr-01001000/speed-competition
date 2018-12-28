@@ -89,3 +89,21 @@ def fast_batch_update(states, root_covs, measurements, loadings, meas_var):
          updated_root_covs (np.ndarray): 3d array of size (nobs, nstates, nstates)
 
      """
+     residuals = measurements - np.dot(states, loadings)
+     
+     f_star = np.dot(root_covs.transpose((0,2,1)), loadings).reshape(len(states), len(loadings), 1)
+     m_left = np.concatenate([np.full((len(states),1,1), np.sqrt(meas_var)), f_star], axis=1)
+     m_right = np.concatenate([np.zeros((len(states),1,len(loadings))), root_covs.transpose((0,2,1))], axis=1)
+     m = np.concatenate([m_left, m_right], axis=2)
+     
+     updated_states = np.zeros((len(states), len(loadings)))
+     updated_root_covs = np.zeros((len(states), len(loadings), len(loadings)))
+     for i in range(len(states)):
+         r = np.linalg.qr(m[i], mode='r')
+         root_sigma = r[0, 0]
+         kalman_gain = r[0, 1:] / root_sigma
+         updated_root_covs[i] = r[1:, 1:].T
+         updated_states[i] = states[i] + np.dot(kalman_gain, residuals[i])
+         
+     return updated_states, updated_root_covs
+     

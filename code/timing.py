@@ -3,8 +3,8 @@ import pandas as pd
 from time import time
 from update import pandas_batch_update
 from update import fast_batch_update
-from update import faster_batch_update
-from update import fastest_batch_update
+#from update import faster_batch_update
+#from update import fastest_batch_update
 
 # load and prepare data
 data = pd.read_stata("../chs_data.dta")
@@ -71,4 +71,19 @@ for i in range(2):
 
 print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
 
+# time the function
+runtimes = []
+for i in range(2):
+    start = time()
+    out_states_fast, out_root_covs_fast = fast_batch_update(
+        states=states_np,
+        root_covs=root_covs_np,
+        measurements=meas_bwght_np,
+        loadings=loadings_bwght_np,
+        meas_var=meas_var_bwght,
+    )
+    stop = time()
+    runtimes.append(stop - start)
+#    print("fast_batch_update took {} seconds.".format(runtimes))
 
+print("fast_batch_update took {} seconds.".format(np.mean(runtimes)))
