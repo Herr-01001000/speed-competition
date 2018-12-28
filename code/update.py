@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+#from numba import jit
+import tensorflow as tf
 
 
 def pandas_update(state, root_cov, measurement, loadings, meas_var):
@@ -65,4 +67,25 @@ def pandas_batch_update(states, root_covs, measurements, loadings, meas_var):
         out_states.append(updated_state)
         out_root_covs.append(updated_root_cov)
     out_states = pd.concat(out_states, axis=1).T
+    
     return out_states, out_root_covs
+
+
+#@jit(nopython=True)
+def fast_batch_update(states, root_covs, measurements, loadings, meas_var):
+     """Update state estimates for a whole dataset.
+
+     Let nstates be the number of states and nobs the number of observations.
+
+     Args:
+         states (np.ndarray): 2d array of size (nobs, nstates)
+         root_covs (np.ndarray): 3d array of size (nobs, nstates, nstates)
+         measurements (np.ndarray): 1d array of size (nobs)
+         loadings (np.ndarray): 1d array of size (nstates)
+         meas_var (float):
+
+     Returns:
+         updated_states (np.ndarray): 2d array of size (nobs, nstates)
+         updated_root_covs (np.ndarray): 3d array of size (nobs, nstates, nstates)
+
+     """

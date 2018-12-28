@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 from time import time
 from update import pandas_batch_update
+from update import fast_batch_update
+from update import faster_batch_update
+from update import fastest_batch_update
 
 # load and prepare data
 data = pd.read_stata("../chs_data.dta")
@@ -55,7 +58,7 @@ meas_var_bwght = 0.8
 runtimes = []
 for i in range(2):
     start = time()
-    pandas_batch_update(
+    out_states, out_root_covs = pandas_batch_update(
         states=states_pd,
         root_covs=root_covs_pd,
         measurements=meas_bwght_pd,
@@ -64,5 +67,8 @@ for i in range(2):
     )
     stop = time()
     runtimes.append(stop - start)
+#    print("pandas_batch_update took {} seconds.".format(runtimes))
 
 print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
+
+
