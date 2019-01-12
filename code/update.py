@@ -4,7 +4,6 @@ import pandas as pd
 
 def pandas_update(state, root_cov, measurement, loadings, meas_var):
     """Update *state* and *root_cov* with with a *measurement*.
-
     Args:
         state (pd.Series): pre-update estimate of the unobserved state vector
         root_cov (pd.DataFrame): lower triangular matrix square-root of the
@@ -15,7 +14,6 @@ def pandas_update(state, root_cov, measurement, loadings, meas_var):
     Returns:
         updated_state (pd.Series)
         updated_root_cov (pd.DataFrame)
-
     """
     expected_measurement = state.dot(loadings)
     residual = measurement - expected_measurement
@@ -40,7 +38,6 @@ def pandas_update(state, root_cov, measurement, loadings, meas_var):
 
 def pandas_batch_update(states, root_covs, measurements, loadings, meas_var):
     """Call pandas_update repeatedly.
-
     Args:
         states (pd.DataFrame)
         root_covs (list)
@@ -50,7 +47,6 @@ def pandas_batch_update(states, root_covs, measurements, loadings, meas_var):
     Returns:
         updated_states (pd.DataFrame)
         updated_root_covs (list)
-
     """
     out_states = []
     out_root_covs = []
