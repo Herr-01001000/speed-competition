@@ -4,10 +4,8 @@ about 0.08 seconds and numba took 0.007 seconds. The biggest improvement we
 achieved was about 1500 times faster with numba compared to pandas.
 
 In our experiment TensorFlow driven by GPU was not stably performing. We had 
-achieved 1000 times' speedup compared to pandas. But its speed slowed down 
-after more iterations.
-
-Writing dot products as loops significantly increased the speed.
+achieved 1000 times' speedup compared to pandas. The speed improvements varied
+when Tensorflow was used in different hardware environments.
 """
 
 import numpy as np
@@ -66,7 +64,7 @@ loadings_bwght_pd = pd.Series(loadings_bwght_np, index=state_names)
 # construct the variance
 meas_var_bwght = 0.8
 
-# time the function
+# time the pandas function
 runtimes = []
 for i in range(2):
     start = time()
@@ -83,7 +81,7 @@ for i in range(2):
 print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
 
 
-# time the function
+# time the numpy function
 runtimes = []
 for i in range(20):
     start = time()
@@ -100,7 +98,7 @@ for i in range(20):
 print("fast_batch_update_np took {} seconds.".format(np.mean(runtimes)))
 
 
-# time the function
+# time the numba function
 runtimes = []
 for i in range(100):
     start = time()
@@ -117,7 +115,7 @@ for i in range(100):
 print("fast_batch_update took {} seconds.".format(np.mean(runtimes[1:])))
 
 
-# time the function
+# time the TensorFlow function
 runtimes = []
 for i in range(2):
     start = time()
@@ -131,4 +129,4 @@ for i in range(2):
     stop = time()
     runtimes.append(stop - start)
 
-print("fast_batch_update_tf took {} seconds.".format(np.mean(runtimes[1:])))
+print("fast_batch_update_tf took {} seconds.".format(np.mean(runtimes)))
