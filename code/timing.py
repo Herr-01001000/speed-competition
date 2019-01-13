@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 from time import time
 from update import pandas_batch_update
+from update import fast_batch_update_np
+from update import fast_batch_update_nb
+from update import fast_batch_update_tf
 
 # load and prepare data
 data = pd.read_stata("../chs_data.dta")
@@ -66,3 +69,54 @@ for i in range(2):
     runtimes.append(stop - start)
 
 print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
+
+
+# time the function
+runtimes = []
+for i in range(20):
+    start = time()
+    out_states_fast, out_root_covs_fast = fast_batch_update_np(
+        states=states_np,
+        root_covs=root_covs_np,
+        measurements=meas_bwght_np,
+        loadings=loadings_bwght_np,
+        meas_var=meas_var_bwght,
+    )
+    stop = time()
+    runtimes.append(stop - start)
+
+print("fast_batch_update_np took {} seconds.".format(np.mean(runtimes)))
+
+
+# time the function
+runtimes = []
+for i in range(100):
+    start = time()
+    out_states_fast, out_root_covs_fast = fast_batch_update_nb(
+        states=states_np,
+        root_covs=root_covs_np,
+        measurements=meas_bwght_np,
+        loadings=loadings_bwght_np,
+        meas_var=meas_var_bwght,
+    )
+    stop = time()
+    runtimes.append(stop - start)
+
+print("fast_batch_update_nb took {} seconds.".format(np.mean(runtimes[1:])))
+
+
+# time the function
+runtimes = []
+for i in range(2):
+    start = time()
+    out_states_fast, out_root_covs_fast = fast_batch_update_tf(
+        states=states_np,
+        root_covs=root_covs_np,
+        measurements=meas_bwght_np,
+        loadings=loadings_bwght_np,
+        meas_var=meas_var_bwght,
+    )
+    stop = time()
+    runtimes.append(stop - start)
+
+print("fast_batch_update_tf took {} seconds.".format(np.mean(runtimes[1:])))
