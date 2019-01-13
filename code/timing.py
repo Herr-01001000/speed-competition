@@ -5,7 +5,7 @@ from update import pandas_batch_update
 from update import fast_batch_update_np
 from update import fast_batch_update_nb
 from update import fast_batch_update_tf
-from update_cl import fast_batch_update_cl
+#from update_cl import fast_batch_update_cl
 
 # load and prepare data
 data = pd.read_stata("../chs_data.dta")
@@ -56,26 +56,26 @@ loadings_bwght_pd = pd.Series(loadings_bwght_np, index=state_names)
 meas_var_bwght = 0.8
 
 # time the function
-#runtimes = []
-#for i in range(2):
-#    start = time()
-#    out_states, out_root_covs = pandas_batch_update(
-#        states=states_pd,
-#        root_covs=root_covs_pd,
-#        measurements=meas_bwght_pd,
-#        loadings=loadings_bwght_pd,
-#        meas_var=meas_var_bwght,
-#    )
-#    stop = time()
-#    runtimes.append(stop - start)
-##    print("pandas_batch_update took {} seconds.".format(runtimes))
-#
-#print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
+runtimes = []
+for i in range(2):
+    start = time()
+    out_states, out_root_covs = pandas_batch_update(
+        states=states_pd,
+        root_covs=root_covs_pd,
+        measurements=meas_bwght_pd,
+        loadings=loadings_bwght_pd,
+        meas_var=meas_var_bwght,
+    )
+    stop = time()
+    runtimes.append(stop - start)
+#    print("pandas_batch_update took {} seconds.".format(runtimes))
+
+print("pandas_batch_update took {} seconds.".format(np.mean(runtimes)))
 
 
 # time the function
 runtimes = []
-for i in range(20):
+for i in range(2):
     start = time()
     out_states_fast, out_root_covs_fast = fast_batch_update_np(
         states=states_np,
@@ -86,14 +86,14 @@ for i in range(20):
     )
     stop = time()
     runtimes.append(stop - start)
-    print("fast_batch_update_np took {} seconds.".format(runtimes))
+#    print("fast_batch_update_np took {} seconds.".format(runtimes))
 
 print("fast_batch_update_np took {} seconds.".format(np.mean(runtimes)))
 
 
 # time the function
 runtimes = []
-for i in range(20):
+for i in range(100):
     start = time()
     out_states_fast, out_root_covs_fast = fast_batch_update_nb(
         states=states_np,
@@ -104,14 +104,14 @@ for i in range(20):
     )
     stop = time()
     runtimes.append(stop - start)
-    print("fast_batch_update_nb took {} seconds.".format(runtimes))
+#    print("fast_batch_update_nb took {} seconds.".format(runtimes))
 
-print("fast_batch_update_nb took {} seconds.".format(np.mean(runtimes)))
+print("fast_batch_update_nb took {} seconds.".format(np.mean(runtimes[1:])))
 
 
 # time the function
 runtimes = []
-for i in range(20):
+for i in range(2):
     start = time()
     out_states_fast, out_root_covs_fast = fast_batch_update_tf(
         states=states_np,
@@ -122,6 +122,6 @@ for i in range(20):
     )
     stop = time()
     runtimes.append(stop - start)
-    print("fast_batch_update_tf took {} seconds.".format(runtimes))
+#    print("fast_batch_update_tf took {} seconds.".format(runtimes))
 
 print("fast_batch_update_tf took {} seconds.".format(np.mean(runtimes)))
