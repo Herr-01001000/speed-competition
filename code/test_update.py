@@ -55,6 +55,7 @@ loadings_bwght_pd = pd.Series(loadings_bwght_np, index=state_names)
 # construct the variance
 meas_var_bwght = 0.8
 
+
 @pytest.fixture
 def setup_update():
 
@@ -67,6 +68,7 @@ def setup_update():
 
     return out
 
+
 out_states, out_root_covs = pandas_batch_update(
     states_pd,
     root_covs_pd,
@@ -74,6 +76,7 @@ out_states, out_root_covs = pandas_batch_update(
     loadings_bwght_pd,
     meas_var_bwght,
 )
+
 
 @pytest.fixture
 def expected_update():
@@ -104,7 +107,7 @@ def test_fast_batch_update_nb_cov_values(setup_update, expected_update):
     calc_mean, calc_root_cov = fast_batch_update_nb(**setup_update)
     assert np.allclose(calc_root_cov, expected_update['cov'])
 
-    
+
 def test_fast_batch_update_tf_mean(setup_update, expected_update):
     calc_mean, calc_root_cov = fast_batch_update_tf(**setup_update)
     assert np.allclose(calc_mean, expected_update['mean'])
