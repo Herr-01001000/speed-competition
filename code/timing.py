@@ -3,9 +3,9 @@ pandas took about 8 seconds, numpy took about 0.2 seconds, TensorFlow took
 about 0.08 seconds and numba took 0.007 seconds. The biggest improvement we
 achieved was about 1500 times faster with numba compared to pandas.
 
-In our experiment TensorFlow driven by GPU was not stably performing. We had 
-achieved 1000 times' speedup compared to pandas. The speed improvements varied
-when Tensorflow was used in different hardware environments.
+In our experiments TensorFlow driven by GPU was not stably performing. We had 
+achieved at most 1000 times' speedup compared to pandas. The speed improvements
+ varied when Tensorflow was used in different hardware environments.
 """
 
 import numpy as np
