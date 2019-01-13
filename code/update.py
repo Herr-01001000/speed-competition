@@ -99,7 +99,7 @@ def fast_batch_update_np(states, root_covs, measurements, loadings, meas_var):
 
 
 @jit(nopython=True)
-def fast_batch_update_nb(states, root_covs, measurements, loadings, meas_var):
+def fast_batch_update(states, root_covs, measurements, loadings, meas_var):
     """Update state estimates for a whole dataset by numba.
     Let nstates be the number of states and nobs the number of observations.
     Args:
